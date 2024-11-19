@@ -2,11 +2,13 @@ package evaluator.arith;
 
 import evaluator.Evaluator;
 import language.Operand;
+import language.Operator;
 import parser.arith.ArithPostfixParser;
 import stack.StackInterface;
+import stack.LinkedStack;
 
 /**
- * An {@link ArithPostfixEvaluator} is a post fix evaluator
+ * An {@link ArithPostfixEvaluator} is a postfix evaluator
  * over simple arithmetic expressions.
  */
 public class ArithPostfixEvaluator implements Evaluator<Integer> {
@@ -17,8 +19,8 @@ public class ArithPostfixEvaluator implements Evaluator<Integer> {
      * Constructs an {@link ArithPostfixEvaluator}.
      */
     public ArithPostfixEvaluator() {
-        //TODO Initialize to your LinkedStack
-        stack = null;
+        // Initialize the stack
+        stack = new LinkedStack<>();
     }
 
     /**
@@ -27,23 +29,41 @@ public class ArithPostfixEvaluator implements Evaluator<Integer> {
      */
     @Override
     public Integer evaluate(String expr) {
-        // TODO Use all the things built so far to create
-        //   the algorithm for postfix evaluation
         ArithPostfixParser parser = new ArithPostfixParser(expr);
+
         while (parser.hasNext()) {
             switch (parser.nextType()) {
                 case OPERAND:
-                    //TODO What do we do when we see an operand?
+                    Operand<Integer> operand = parser.nextOperand();
+                    stack.push(operand);
                     break;
                 case OPERATOR:
-                    //TODO What do we do when we see an operator?
+                    Operator<Integer> operator = parser.nextOperator();
+                    int numArgs = operator.getNumberOfArguments();
+                    Operand<Integer>[] operands = new Operand[numArgs];
+
+                    for (int i = numArgs - 1; i >= 0; i--) {
+                        if (stack.isEmpty()) {
+                            throw new IllegalStateException("Not enough operands on the stack.");
+                        }
+                        operands[i] = stack.pop();
+                    }
+
+                    for (int i = 0; i < numArgs; i++) {
+                        operator.setOperand(i, operands[i]);
+                    }
+
+                    Operand<Integer> result = operator.performOperation();
+                    stack.push(result);
                     break;
                 default:
-                    //TODO If we get here, something went very wrong
+                    throw new IllegalStateException("Unexpected token type.");
             }
         }
 
-        //TODO What do we return?
-        return null;
+        if (stack.size() != 1) {
+            throw new IllegalStateException("Invalid postfix expression. Stack should contain exactly one operand at the end.");
+        }
+        return stack.pop().getValue();
     }
 }
