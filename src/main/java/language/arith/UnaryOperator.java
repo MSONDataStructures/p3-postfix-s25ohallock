@@ -4,27 +4,33 @@ import language.Operand;
 import language.Operator;
 
 public abstract class UnaryOperator<T> implements Operator<T> {
-
-    private Operand<T> op0;
+    private Operand<T> operand;
+    private boolean operandSet;
 
     @Override
     public int getNumberOfArguments() {
-        return 1; // this one is on the house
+        return 1;
     }
 
     @Override
-    public void setOperand(int i, Operand<T> operand) {
-        // TODO: Modify the example from the BinaryOperator
-        //   implementation to implement this UnaryOperator
-        //   abstract class (which will have NegateOperator
-        //   as a subclass).
+    public void setOperand(int position, Operand<T> operand) {
+        if (position != 0) {
+            throw new IllegalArgumentException("Unary operators only accept operand at position 0.");
+        }
+        if (operand == null) {
+            throw new NullPointerException("Operand cannot be null.");
+        }
+        if (operandSet) {
+            throw new IllegalStateException("Operand has already been set.");
+        }
+        this.operand = operand;
+        operandSet = true;
     }
 
-    /**
-     * Returns the first operand.
-     * @return the first operand
-     */
-    public Operand<T> getOp0() {
-        return op0; // this one is better than ever
+    protected Operand<T> getOperand() {
+        if (!operandSet) {
+            throw new IllegalStateException("Operand has not been set.");
+        }
+        return operand;
     }
 }
