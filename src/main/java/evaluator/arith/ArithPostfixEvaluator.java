@@ -1,4 +1,4 @@
-package evaluator.arith;
+package main.java.evaluator.arith;
 
 import evaluator.Evaluator;
 import language.Operand;
