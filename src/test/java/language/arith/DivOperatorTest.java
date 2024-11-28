@@ -119,7 +119,9 @@ class DivOperatorTest {
     @Test
     public void testIllegalStateExceptionZeroDenominator() {
         assertThrows(IllegalStateException.class,
-                () -> operator.setOperand(1, new Operand<Integer>(0)),
+                () -> operator.setOperand(1, new Operand<>(0)),
                 "Operator should not allow the denominator to be set to zero");
     }
+
+
 }
