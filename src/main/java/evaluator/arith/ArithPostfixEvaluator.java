@@ -5,6 +5,7 @@ import language.Operator;
 import parser.arith.ArithPostfixParser;
 import stack.StackInterface;
 import stack.LinkedStack;
+import evaluator.IllegalPostfixExpressionException;
 
 /**
  * An {@link ArithPostfixEvaluator} is a postfix evaluator
@@ -43,7 +44,7 @@ public class ArithPostfixEvaluator implements Evaluator<Integer> {
 
                     for (int i = numArgs - 1; i >= 0; i--) {
                         if (stack.isEmpty()) {
-                            throw new IllegalStateException("Not enough operands on the stack.");
+                            throw new IllegalPostfixExpressionException("Not enough operands on the stack.");
                         }
                         operands[i] = stack.pop();
                     }
@@ -61,8 +62,10 @@ public class ArithPostfixEvaluator implements Evaluator<Integer> {
         }
 
         if (stack.size() != 1) {
-            throw new IllegalStateException("Invalid postfix expression. Stack should contain exactly one operand at the end.");
+            throw new IllegalPostfixExpressionException("Invalid postfix expression. Stack should contain exactly one operand at the end.");
         }
         return stack.pop().getValue();
     }
+
+
 }
