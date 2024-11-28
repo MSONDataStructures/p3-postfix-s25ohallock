@@ -109,18 +109,17 @@ class LinkedStackTest {
     }
 
     @Test
-    public void testStackUnderflowPop() {
-        assertThrows(StackUnderflowException.class,
-                () -> intStack.pop(),
-                "Pop on an empty stack should throw underflow.");
+    void testStackUnderflowPop() {
+        LinkedStack<Integer> stack = new LinkedStack<>();
+        assertThrows(StackUnderflowException.class, stack::pop);
     }
 
     @Test
-    public void testStackUnderflowTop() {
-        assertThrows(StackUnderflowException.class,
-                () -> intStack.top(),
-                "Examining the top of an empty stack should throw underflow.");
+    void testStackUnderflowTop() {
+        LinkedStack<Integer> stack = new LinkedStack<>();
+        assertThrows(StackUnderflowException.class, stack::top);
     }
+
 
     @Test
     public void testNullPointer() {
