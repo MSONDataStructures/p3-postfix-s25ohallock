@@ -10,54 +10,58 @@ package stack;
  */
 public class LinkedStack<T> implements StackInterface<T> {
 
-    Node<T> first;
-    int size;
+    private static class Node<T> {
+        T data;
+        Node<T> next;
 
-    /**
-     * {@inheritDoc}.
-     */
-    @Override
-    public T pop() throws StackUnderflowException {
-        // TODO: Implement the pop method, which will be
-        //   similar to a removeFirst method for a LinkedList
-        //   (a special case of our remove method).
-        //   If the list is empty you should throw an exception.
-        return null;
+        Node(T data, Node<T> next) {
+            this.data = data;
+            this.next = next;
+        }
     }
 
-    /**
-     * {@inheritDoc}.
-     */
+    private Node<T> first;
+    private int size;
+
     @Override
-    public T top() throws StackUnderflowException {
-        // TODO: Implement the top method, which will be
-        //   similar to a getFirst method for a LinkedList
-        //   (a special case of our get method).
-        //   If the list is empty you should throw an exception.
-        return null;
+    public T pop() {
+        if (isEmpty()) {
+            throw new StackUnderflowException("Stack is empty");
+        }
+        if (isEmpty()) {
+            return null;
+        }
+        T data = first.data;
+        first = first.next;
+        size--;
+        return data;
     }
 
-    /**
-     * {@inheritDoc}.
-     */
+    @Override
+    public T top() {
+        if (isEmpty()) {
+            throw new StackUnderflowException("Stack is empty");
+        }
+        if (isEmpty()) {
+            return null;
+        }
+        return first.data;
+    }
+
     @Override
     public void push(T elem) throws NullPointerException {
-        // TODO: Implement the push method, which will be
-        //   similar to the addFirst method for a LinkedList.
-        //   If elem is null you should throw an exception.
+        if (elem == null) {
+            throw new NullPointerException("Can't add null element to the stack!");
+        }
+        first = new Node<>(elem, first);
+        size++;
     }
 
-    /**
-     * {@inheritDoc}.
-     */
     @Override
     public boolean isEmpty() {
         return size == 0;
     }
 
-    /**
-     * {@inheritDoc}.
-     */
     @Override
     public int size() {
         return size;
